@@ -15,6 +15,7 @@ function setup() {
   b1 = color(255);
   b2 = color(0);
   mover = 2;
+  movespeed = 15;
 }
 
 
@@ -112,11 +113,13 @@ var y4enem1= windowHeight/2;
     f = windowHeight/2;
   }
  
-  mover = mover+5;
+  
   if((x2enem1>(windowWidth - 60)) || (x1enem1<30))
   {
-    mover = (-1)*mover;
+    movespeed = (-movespeed);
+    mover = mover + movespeed;
   }
+  mover = mover + movespeed;
 
 
   fill(0);
