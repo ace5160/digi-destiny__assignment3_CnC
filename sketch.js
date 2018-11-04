@@ -131,6 +131,10 @@ var y4enem1= windowHeight/2;
   quad(((windowWidth/2)-40),windowHeight-100,((windowWidth/2)+40),windowHeight-80,((windowWidth/2)+40),windowHeight,((windowWidth/2)-40),windowHeight);
   stroke(0);
   line(((windowWidth/2)-40), windowHeight-80, ((windowWidth/2)+40), windowHeight-60);
+
+  //enemy bullets
+  //fill(255);
+
 }
 
 function windowResized() {
