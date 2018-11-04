@@ -58,10 +58,7 @@ var y4enem1= windowHeight/2;
   setGradient(0, 0, windowWidth, windowHeight/2, b2, b1, Y_AXIS);
   setGradient(0, windowHeight/2, windowWidth, windowHeight, b2, b1, Y_AXIS);
   
-  //gun
-  fill(255);
-  quad(((windowWidth/2)-40),windowHeight-100,((windowWidth/2)+40),windowHeight-80,((windowWidth/2)+40),windowHeight,((windowWidth/2)-40),windowHeight);
-  
+ 
   //environment
   line(0.571*windowWidth, windowHeight/2, windowWidth, windowHeight);
   line(0.514*windowWidth, windowHeight/2, 0.714*windowWidth, windowHeight);
@@ -122,10 +119,18 @@ var y4enem1= windowHeight/2;
   mover = mover + movespeed;
 
 
-  fill(0);
- quad(x1enem1, y1enem1, x2enem1, y2enem1, x3enem1, y3enem1, x4enem1, y4enem1);
- fill(255);
- triangle(x1enem1+30, y1enem1+50, x1enem1+30, y1enem1+30, x1enem1+60, y1enem1+50); 
+  fill(0); //body color
+ quad(x1enem1, y1enem1, x2enem1, y2enem1, x3enem1, y3enem1, x4enem1, y4enem1); //body
+ fill(255); //misc color
+ triangle(x1enem1+40, y1enem1+70, x1enem1+40, y1enem1+30, x1enem1+70, y1enem1+70); //left eye
+ triangle(x1enem1+100, y1enem1+70, x1enem1+130, y1enem1+30, x1enem1+130, y1enem1+70); //right eye
+ quad(x4enem1+10, y4enem1-20, x4enem1+70, y4enem1-20, x4enem1+50, y4enem1-40, x4enem1+30, y4enem1-40);
+
+  //gun
+  fill(255);
+  quad(((windowWidth/2)-40),windowHeight-100,((windowWidth/2)+40),windowHeight-80,((windowWidth/2)+40),windowHeight,((windowWidth/2)-40),windowHeight);
+  stroke(0);
+  line(((windowWidth/2)-40), windowHeight-80, ((windowWidth/2)+40), windowHeight-60);
 }
 
 function windowResized() {
