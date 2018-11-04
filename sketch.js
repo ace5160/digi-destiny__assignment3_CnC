@@ -3,6 +3,11 @@ var b;
 var b1, b2;
 var Y_AXIS = 1;
 var X_AXIS = 2;
+var bullet_start_pos;//bullet
+var bullet_reducefactor;//decrease the size of bullet
+var shoot;//if bullet shot
+
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   stroke(255);
@@ -16,6 +21,10 @@ function setup() {
   b2 = color(0);
   mover = 2;
   movespeed = 15;
+  bullet_start_pos=windowHeight-153;
+  shoot=1;//bullet is shot
+  bullet_reducefactor=1; //reduce size of bullet slightly
+
 }
 
 
@@ -124,14 +133,73 @@ var y4enem1= windowHeight/2;
  fill(255); //misc color
  triangle(x1enem1+40, y1enem1+70, x1enem1+40, y1enem1+30, x1enem1+70, y1enem1+70); //left eye
  triangle(x1enem1+100, y1enem1+70, x1enem1+130, y1enem1+30, x1enem1+130, y1enem1+70); //right eye
- quad(x4enem1+10, y4enem1-20, x4enem1+70, y4enem1-20, x4enem1+50, y4enem1-40, x4enem1+30, y4enem1-40);
+ quad(x4enem1+15, y4enem1-50, x4enem1+65, y4enem1-50, x4enem1+60, y4enem1-60, x4enem1+20, y4enem1-60);
 
+  
+  //bullets of gun
+  fill(255);
+  ellipse(windowWidth/2, bullet_start_pos, 80/bullet_reducefactor, 80/bullet_reducefactor);
+  if(shoot==1)//condition if shoot is pressed
+  {
+    bullet_start_pos=bullet_start_pos-10;//bullet speed
+    bullet_reducefactor=bullet_reducefactor+0.05;
+  }
+  
+  if (bullet_start_pos < (windowHeight/2)-50) {
+    
+    bullet_start_pos=windowHeight;
+    shoot=0;
+    bullet_reducefactor=1;
+  }
+  
+  
+  //Bullet hit
+  if(bullet_start_pos < (windowHeight/2)  && bullet_start_pos > (windowHeight/2)-80)// condition check for hit
+  {
+    //check if enemy x position is in middle of screen
+  //  if(x2enem1<((windowWidth/2)+40) && x1enem1>((windowWidth/2)-40))
+    //if(x2enem1<((windowWidth/2)+40))
+    if(x1enem1>((windowWidth/2)-150) && x2enem1<((windowWidth/2)+150) )
+    {
+       fill(255);
+     ellipse(windowWidth/2, windowHeight/2, 80, 80);
+    }
+    
+  }
+  
+  //if fire pressed
+  if (keyIsPressed && key == 'x') 
+  {
+    shoot=1;
+  }
+
+  
+  //gunhand
+  fill(255);
+  quad(((windowWidth/2)-40),windowHeight-100,((windowWidth/2)+40),windowHeight-80,((windowWidth/2)+40),windowHeight,((windowWidth/2)-40),windowHeight);
+  stroke(0);
+  line(((windowWidth/2)-40), windowHeight-80, ((windowWidth/2)+40), windowHeight-60);
+
+  
+
+
+function windowResized() {
+    // change canvas size
+    createCanvas(windowWidth, windowHeight);    
+}
+
+
+
+  
+  
   //gun
   fill(255);
   quad(((windowWidth/2)-40),windowHeight-100,((windowWidth/2)+40),windowHeight-80,((windowWidth/2)+40),windowHeight,((windowWidth/2)-40),windowHeight);
   stroke(0);
   line(((windowWidth/2)-40), windowHeight-80, ((windowWidth/2)+40), windowHeight-60);
 
+  // line((windowWidth/2), windowHeight, (windowWidth/2), (windowHeight-50));
+  
   //enemy bullets
   //fill(255);
 
@@ -141,3 +209,4 @@ function windowResized() {
     // change canvas size
     createCanvas(windowWidth, windowHeight);    
 }
+
