@@ -6,6 +6,8 @@ var X_AXIS = 2;
 var bullet_start_pos;//bullet
 var bullet_reducefactor;//decrease the size of bullet
 var shoot;//if bullet shot
+var stop_enemybullet=0;
+
 
 
 function setup() {
@@ -22,9 +24,11 @@ function setup() {
   mover = 2;
   movespeed = 15;
   bullet_start_pos=windowHeight-153;
-  shoot=1;//bullet is shot
+  shoot=0;//bullet is shot
   bullet_reducefactor=1; //reduce size of bullet slightly
-
+  enemy_bullet_x=width / 4;
+  enemy_bullet_y=height/2;
+    
 }
 
 
@@ -136,6 +140,24 @@ var y4enem1= windowHeight/2;
  quad(x4enem1+15, y4enem1-50, x4enem1+65, y4enem1-50, x4enem1+60, y4enem1-60, x4enem1+20, y4enem1-60);
 
   
+  
+  //enemy bullets
+  fill(100);
+  ellipse(enemy_bullet_x,enemy_bullet_y, 24, 24);
+  if(enemy_bullet_y< windowHeight && stop_enemybullet==0)
+   {
+    //lerp from initial to final position
+    enemy_bullet_x = lerp(enemy_bullet_x, windowWidth/2, 0.03);
+    enemy_bullet_y = lerp(enemy_bullet_y, windowHeight, 0.03);
+   }
+  if(enemy_bullet_y> (windowHeight-5) && stop_enemybullet==0)
+   {
+    enemy_bullet_x=x2enem1;
+    enemy_bullet_y=windowHeight/2;
+   }
+  
+ 
+  
   //bullets of gun
   fill(255);
   ellipse(windowWidth/2, bullet_start_pos, 80/bullet_reducefactor, 80/bullet_reducefactor);
@@ -144,9 +166,8 @@ var y4enem1= windowHeight/2;
     bullet_start_pos=bullet_start_pos-10;//bullet speed
     bullet_reducefactor=bullet_reducefactor+0.05;
   }
-  
-  if (bullet_start_pos < (windowHeight/2)-50) {
-    
+   if(bullet_start_pos < (windowHeight/2)-50)
+  {
     bullet_start_pos=windowHeight;
     shoot=0;
     bullet_reducefactor=1;
@@ -157,15 +178,16 @@ var y4enem1= windowHeight/2;
   if(bullet_start_pos < (windowHeight/2)  && bullet_start_pos > (windowHeight/2)-80)// condition check for hit
   {
     //check if enemy x position is in middle of screen
-  //  if(x2enem1<((windowWidth/2)+40) && x1enem1>((windowWidth/2)-40))
-    //if(x2enem1<((windowWidth/2)+40))
     if(x1enem1>((windowWidth/2)-150) && x2enem1<((windowWidth/2)+150) )
     {
-       fill(255);
-     ellipse(windowWidth/2, windowHeight/2, 80, 80);
+      fill(255);
+      ellipse(windowWidth/2, windowHeight/2, 80, 80);
+      mover=0;
+      movespeed=0;
+      stop_enemybullet=1;
     }
-    
   }
+    
   
   //if fire pressed
   if (keyIsPressed && key == 'x') 
@@ -188,9 +210,6 @@ function windowResized() {
     createCanvas(windowWidth, windowHeight);    
 }
 
-
-
-  
   
   //gun
   fill(255);
@@ -198,10 +217,6 @@ function windowResized() {
   stroke(0);
   line(((windowWidth/2)-40), windowHeight-80, ((windowWidth/2)+40), windowHeight-60);
 
-  // line((windowWidth/2), windowHeight, (windowWidth/2), (windowHeight-50));
-  
-  //enemy bullets
-  //fill(255);
 
 }
 
@@ -209,4 +224,3 @@ function windowResized() {
     // change canvas size
     createCanvas(windowWidth, windowHeight);    
 }
-
