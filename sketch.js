@@ -7,7 +7,8 @@ var bullet_start_pos;//bullet
 var bullet_reducefactor;//decrease the size of bullet
 var shoot;//if bullet shot
 var stop_enemybullet=0;
-
+var enable_shoot;
+var player_health=3;
 
 
 function setup() {
@@ -25,6 +26,7 @@ function setup() {
   movespeed = 15;
   bullet_start_pos=windowHeight-153;
   shoot=0;//bullet is shot
+  enable_shoot=-1;
   bullet_reducefactor=1; //reduce size of bullet slightly
   enemy_bullet_x=width / 4;
   enemy_bullet_y=height/2;
@@ -131,7 +133,34 @@ var y4enem1= windowHeight/2;
   }
   mover = mover + movespeed;
 
+  //UI
+   fill(100); 
+ quad(0, 0, 0, windowHeight/16, windowWidth, windowHeight/16,windowWidth, 0); 
+  
+  //UI-PlayerHealth_outerborder
+   fill(80); 
+ quad(windowWidth/1.1, windowHeight/21, windowWidth/1.1, windowHeight/64, windowWidth/1.02, windowHeight/64,windowWidth/1.02, windowHeight/21); 
+  
+  //UI payer health
+  
+  if(player_health>0)
+  {
+   fill(0); 
+ quad(windowWidth/1.05, windowHeight/24, windowWidth/1.05, windowHeight/50, windowWidth/1.03, windowHeight/50,windowWidth/1.03, windowHeight/24); 
+  }
+  
+  if(player_health>1)
+  {
+   fill(0); 
+ quad(windowWidth/1.07, windowHeight/24, windowWidth/1.07, windowHeight/50, windowWidth/1.05, windowHeight/50,windowWidth/1.05, windowHeight/24); 
+  }
+  if(player_health>2)
+  {
+   fill(0); 
+ quad(windowWidth/1.09, windowHeight/24, windowWidth/1.09, windowHeight/50, windowWidth/1.07, windowHeight/50,windowWidth/1.07, windowHeight/24); 
+  }
 
+  
   fill(0); //body color
  quad(x1enem1, y1enem1, x2enem1, y2enem1, x3enem1, y3enem1, x4enem1, y4enem1); //body
  fill(255); //misc color
@@ -148,8 +177,16 @@ var y4enem1= windowHeight/2;
    {
     //lerp from initial to final position
     enemy_bullet_x = lerp(enemy_bullet_x, windowWidth/2, 0.03);
-    enemy_bullet_y = lerp(enemy_bullet_y, windowHeight, 0.03);
+    enemy_bullet_y = lerp(enemy_bullet_y, windowHeight+180, 0.03);
    }
+  
+  //player health condition
+  if(enable_shoot == 1 && enemy_bullet_y> (windowHeight-8) )
+  {
+    player_health=player_health-1;
+  }
+  
+  //resetting and reshooting enemy bullet
   if(enemy_bullet_y> (windowHeight-5) && stop_enemybullet==0)
    {
     enemy_bullet_x=x2enem1;
@@ -157,10 +194,12 @@ var y4enem1= windowHeight/2;
    }
   
  
-  
+  if(enable_shoot==1)
+  {
   //bullets of gun
   fill(255);
   ellipse(windowWidth/2, bullet_start_pos, 80/bullet_reducefactor, 80/bullet_reducefactor);
+  }
   if(shoot==1)//condition if shoot is pressed
   {
     bullet_start_pos=bullet_start_pos-10;//bullet speed
@@ -168,10 +207,24 @@ var y4enem1= windowHeight/2;
   }
    if(bullet_start_pos < (windowHeight/2)-50)
   {
-    bullet_start_pos=windowHeight;
+    //shoot=0;
+  //  var reload=0;
+    //setInterval(bullet_reset,10000);
+    //if(reload=1)
+    //{
+   bullet_start_pos=windowHeight-153;
     shoot=0;
     bullet_reducefactor=1;
+    //}
+    //reload=0;
   }
+  
+  //function bullet_reset()
+  //{
+    //bullet_start_pos=windowHeight-153;
+    //reload=1;
+   // bullet_reducefactor=1;
+  //}
   
   
   //Bullet hit
@@ -190,17 +243,21 @@ var y4enem1= windowHeight/2;
     
   
   //if fire pressed
-  if (keyIsPressed && key == 'x') 
+  if (keyIsPressed && key == 'x' && enable_shoot==1) 
   {
     shoot=1;
   }
+  if (keyIsPressed && key == 'c') 
+  {
+   enable_shoot=(enable_shoot*(-1));
+  }
 
-  
+
   //gunhand
-  fill(255);
-  quad(((windowWidth/2)-40),windowHeight-100,((windowWidth/2)+40),windowHeight-80,((windowWidth/2)+40),windowHeight,((windowWidth/2)-40),windowHeight);
-  stroke(0);
-  line(((windowWidth/2)-40), windowHeight-80, ((windowWidth/2)+40), windowHeight-60);
+  //fill(255);
+  //quad(((windowWidth/2)-40),windowHeight-100,((windowWidth/2)+40),windowHeight-80,((windowWidth/2)+40),windowHeight,((windowWidth/2)-40),windowHeight);
+  //stroke(0);
+  //line(((windowWidth/2)-40), windowHeight-80, ((windowWidth/2)+40), windowHeight-60);
 
   
 
@@ -210,13 +267,14 @@ function windowResized() {
     createCanvas(windowWidth, windowHeight);    
 }
 
-  
+  if(enable_shoot==1)
+  {
   //gun
   fill(255);
   quad(((windowWidth/2)-40),windowHeight-100,((windowWidth/2)+40),windowHeight-80,((windowWidth/2)+40),windowHeight,((windowWidth/2)-40),windowHeight);
   stroke(0);
   line(((windowWidth/2)-40), windowHeight-80, ((windowWidth/2)+40), windowHeight-60);
-
+  }
 
 }
 
