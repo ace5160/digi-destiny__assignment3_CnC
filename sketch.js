@@ -4,11 +4,22 @@ var b1, b2;
 var Y_AXIS = 1;
 var X_AXIS = 2;
 var bullet_start_pos;//bullet
+var pbullet_oldx;
+var pbullet_oldy;
 var bullet_reducefactor;//decrease the size of bullet
 var shoot;//if bullet shot
 var stop_enemybullet=0;
 var enable_shoot;
 var player_health=3;
+var system; //for particle effect
+var enemy_die_particle=0;
+var enemy_die_particle_lifespan=50;
+
+//arduino variables
+var serial; // variable to hold an instance of the serialport library
+var portName = 'COM4';  // fill in your serial
+var inData;
+var checkval = 0;
 
 
 function setup() {
@@ -30,6 +41,18 @@ function setup() {
   bullet_reducefactor=1; //reduce size of bullet slightly
   enemy_bullet_x=width / 4;
   enemy_bullet_y=height/2;
+
+  //arduino part
+  serial = new p5.SerialPort(); // make a new instance of the serialport library
+  //serial.on('list', printList); // set a callback function for the serialport list event
+  serial.on('connected', serverConnected); // callback for connecting to the server
+  serial.on('open', portOpen);        // callback for the port opening
+  serial.on('data', serialEvent);     // callback for when new data arrives
+  serial.on('error', serialError);    // callback for errors
+  serial.on('close', portClose);      // callback for the port closing
+ 
+ serial.list(); // list the serial ports
+ serial.open(portName);              // open a serial port
     
 }
 
@@ -73,7 +96,7 @@ var y4enem1= windowHeight/2;
   setGradient(0, 0, windowWidth, windowHeight/2, b2, b1, Y_AXIS);
   setGradient(0, windowHeight/2, windowWidth, windowHeight, b2, b1, Y_AXIS);
   
- 
+    
   //environment
   line(0.571*windowWidth, windowHeight/2, windowWidth, windowHeight);
   line(0.514*windowWidth, windowHeight/2, 0.714*windowWidth, windowHeight);
@@ -160,6 +183,16 @@ var y4enem1= windowHeight/2;
  quad(windowWidth/1.09, windowHeight/24, windowWidth/1.09, windowHeight/50, windowWidth/1.07, windowHeight/50,windowWidth/1.07, windowHeight/24); 
   }
 
+  //enemy die...particle effect
+  if(enemy_die_particle==1)
+  {
+    if(enemy_die_particle_lifespan>0)
+    {
+     fill(255);
+    ellipse(random((width/2)-20,(width/2)+20), random((height/2)-45,(height/2)+40), 5, 5);  
+    enemy_die_particle_lifespan=enemy_die_particle_lifespan-1;
+    }
+  }
   
   fill(0); //body color
  quad(x1enem1, y1enem1, x2enem1, y2enem1, x3enem1, y3enem1, x4enem1, y4enem1); //body
@@ -168,7 +201,29 @@ var y4enem1= windowHeight/2;
  triangle(x1enem1+100, y1enem1+70, x1enem1+130, y1enem1+30, x1enem1+130, y1enem1+70); //right eye
  quad(x4enem1+15, y4enem1-50, x4enem1+65, y4enem1-50, x4enem1+60, y4enem1-60, x4enem1+20, y4enem1-60);
 
-  
+  //bullet shoot effect
+   if (keyIsPressed && key == 'x' && enable_shoot==1) 
+   {
+  push();
+     fill(180);
+     noStroke();
+  star(windowWidth/2,windowHeight-100,100,40,8);
+  pop();
+  function star(x, y, radius1, radius2, npoints) {
+  var angle = TWO_PI / npoints;
+  var halfAngle = angle/2.0;
+  beginShape();
+  for (var a = 0; a < TWO_PI; a += angle) {
+    var sx = x + cos(a) * radius2;
+    var sy = y + sin(a) * radius2;
+    vertex(sx, sy);
+    sx = x + cos(a+halfAngle) * radius1;
+    sy = y + sin(a+halfAngle) * radius1;
+    vertex(sx, sy);
+  }
+  endShape(CLOSE);
+  }
+   }
   
   //enemy bullets
   fill(100);
@@ -196,10 +251,22 @@ var y4enem1= windowHeight/2;
  
   if(enable_shoot==1)
   {
+    
+    //after images
+    if(pbullet_oldy<windowHeight-163)
+    {
+      fill(190,80);
+      noStroke();
+  ellipse(windowWidth/2, bullet_start_pos+30, 80/bullet_reducefactor, 80/bullet_reducefactor+40);
+    }
+      
   //bullets of gun
   fill(255);
+    noStroke();
   ellipse(windowWidth/2, bullet_start_pos, 80/bullet_reducefactor, 80/bullet_reducefactor);
   }
+  pbullet_oldx=windowWidth/2;
+  pbullet_oldy=bullet_start_pos;
   if(shoot==1)//condition if shoot is pressed
   {
     bullet_start_pos=bullet_start_pos-10;//bullet speed
@@ -214,6 +281,7 @@ var y4enem1= windowHeight/2;
     //{
    bullet_start_pos=windowHeight-153;
     shoot=0;
+    
     bullet_reducefactor=1;
     //}
     //reload=0;
@@ -233,11 +301,14 @@ var y4enem1= windowHeight/2;
     //check if enemy x position is in middle of screen
     if(x1enem1>((windowWidth/2)-150) && x2enem1<((windowWidth/2)+150) )
     {
-      fill(255);
-      ellipse(windowWidth/2, windowHeight/2, 80, 80);
+      //fill(255);
+     // ellipse(windowWidth/2, windowHeight/2, 80, 80);
       mover=0;
       movespeed=0;
       stop_enemybullet=1;
+      //generate particle effect here: (windowHeight/2)-50...h/2+50..-+5......w/2 +- 5
+      enemy_die_particle=1;
+      
     }
   }
     
@@ -247,9 +318,19 @@ var y4enem1= windowHeight/2;
   {
     shoot=1;
   }
-  if (keyIsPressed && key == 'c') 
+
+//console.log(inData); 
+  if (inData < 30) 
+  //if (inData == 1)
   {
-   enable_shoot=(enable_shoot*(-1));
+   //console.log(inData); 
+   enable_shoot = 1;
+   checkval = 0;
+   //console.log(checkval);
+  }
+  else 
+  {
+    enable_shoot = -1;
   }
 
 
@@ -276,9 +357,34 @@ function windowResized() {
   line(((windowWidth/2)-40), windowHeight-80, ((windowWidth/2)+40), windowHeight-60);
   }
 
+ // checkval=0;
+
+}
+
+ function serverConnected() {
+  //console.print('connected to server.');
+}
+ 
+function portOpen() {
+  console.log('the serial port opened.')
+}
+ 
+function serialEvent() {
+ inData = serial.readStringUntil('\r\n');
+ console.log(inData);
+ checkval = 1;
+}
+ 
+function serialError(err) {
+  console.log('Something went wrong with the serial port. ' + err);
+}
+ 
+function portClose() {
+  console.log('The serial port closed.');
 }
 
 function windowResized() {
     // change canvas size
     createCanvas(windowWidth, windowHeight);    
 }
+
