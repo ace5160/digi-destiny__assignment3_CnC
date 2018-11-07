@@ -37,7 +37,7 @@ function setup() {
   movespeed = 15;
   bullet_start_pos=windowHeight-153;
   shoot=0;//bullet is shot
-  enable_shoot=-1;
+  enable_shoot= -1;
   bullet_reducefactor=1; //reduce size of bullet slightly
   enemy_bullet_x=width / 4;
   enemy_bullet_y=height/2;
