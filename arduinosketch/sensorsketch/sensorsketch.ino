@@ -1,3 +1,4 @@
+
 /*
  * Creation & Computation - Digital Futures, OCAD University
  * Kate Hartman / Nick Puckett
@@ -9,6 +10,9 @@
  * 
  */
 #include <NewPing.h>   //include the library
+#include <ArduinoJson.h>
+
+int buttonPin1 = 7;
 
 //nt
 const int numReadings = 3;
@@ -23,15 +27,16 @@ int echoPin = 11;       //pin connected to the Echo pin on the sensor
 int maxDistance = 200;  //set the max distance for the sensor to read (helps with errors)
 int distanceVal;        //variable to hold the distance val
 
-int sampleRate = 100;   //how fast to sample the value
+int sampleRate = 200;   //how fast to sample the value
 long lastReading;       //used for the timer
+int finval=0;
 
 NewPing proximity1(triggerPin, echoPin, maxDistance);   //sets up the sensor object
 
 void setup() 
 {
   Serial.begin(9600);  //start the serial port
-
+  pinMode(buttonPin1, INPUT_PULLUP);
   //nt
   for (int thisReading = 0; thisReading < numReadings; thisReading++) 
   {
@@ -44,8 +49,16 @@ void setup()
 void loop() 
 {
 
+int buttonVal = digitalRead(buttonPin1);
+if ( buttonVal == 0){
+  buttonVal = 1;
+} else {
+  buttonVal = 0;
+}
+
   if(millis()-lastReading>=sampleRate) //this very simple statement is the timer,
   { 
+ 
   distanceVal = proximity1.ping_cm();  //get the distance value in centimeters  
   lastReading = millis();
 
@@ -55,10 +68,13 @@ if(distanceVal!=0)
 {
   // subtract the last reading:
   total = total - readings[readIndex];
+  
   // read from the sensor:
   readings[readIndex] = distanceVal;
+  
   // add the reading to the total:
   total = total + readings[readIndex];
+  
   // advance to the next position in the array:
   readIndex = readIndex + 1;
 
@@ -70,8 +86,28 @@ if(distanceVal!=0)
 
   // calculate the average:
   average = total / numReadings;
-  // send it to the computer as ASCII digits
-  Serial.println(average);
+
+  if(average<30)
+  {
+    finval=1;
+  }
+  else
+  {
+    finval=0;
+  }
+
+ DynamicJsonBuffer messageBuffer(200);
+  JsonObject& p5Send = messageBuffer.createObject();
+
+    p5Send["s1"]= finval;
+     p5Send["s2"]= buttonVal;
+
+     p5Send.printTo(Serial);
+     Serial.println();
+
+  
+  //Serial.println(average);
+  //Serial.println(finval);
   //delay(1);        // delay in between reads for stability
   //Serial.print("Distance Reading CM : ");  //print the value to the Serial monitor
   //Serial.println(distanceVal);

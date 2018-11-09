@@ -10,7 +10,7 @@ var bullet_reducefactor;//decrease the size of bullet
 var shoot;//if bullet shot
 var stop_enemybullet=0;
 var enable_shoot;
-var player_health=3;
+var player_health=10;///////////////////Player health*****
 var system; //for particle effect
 var enemy_die_particle=0;
 var enemy_die_particle_lifespan=50;
@@ -19,7 +19,16 @@ var enemy_die_particle_lifespan=50;
 var serial; // variable to hold an instance of the serialport library
 var portName = 'COM4';  // fill in your serial
 var inData;
+var buttondata;
 var checkval = 0;
+
+var font,/////////////////text part******
+  fontsize = 40;
+var game_over=0;
+var player_hit=0;
+var player_hit_color=0;
+//player hit color*****
+var c1, c2;
 
 
 function setup() {
@@ -33,16 +42,17 @@ function setup() {
   f=0.916*windowHeight;
   b1 = color(255);
   b2 = color(0);
+  
   mover = 2;
   movespeed = 15;
   bullet_start_pos=windowHeight-153;
   shoot=0;//bullet is shot
-  enable_shoot= -1;
+  enable_shoot=-1;
   bullet_reducefactor=1; //reduce size of bullet slightly
   enemy_bullet_x=width / 4;
   enemy_bullet_y=height/2;
 
-  //arduino part
+   //arduino part
   serial = new p5.SerialPort(); // make a new instance of the serialport library
   //serial.on('list', printList); // set a callback function for the serialport list event
   serial.on('connected', serverConnected); // callback for connecting to the server
@@ -53,6 +63,10 @@ function setup() {
  
  serial.list(); // list the serial ports
  serial.open(portName);              // open a serial port
+    
+  
+  fontsize=windowHeight/24;
+  textSize(fontsize);//text part*****
     
 }
 
@@ -80,6 +94,10 @@ function setGradient(x, y, w, h, c1, c2, axis) {
   }
 }
 function draw() {
+  
+    //  setGradient(50, 90, 540, 80, c1, c2, Y_AXIS);
+
+     
 
 var x1enem1= ((windowWidth/2) - 100) + mover;
 var y1enem1= windowHeight/4;
@@ -90,12 +108,17 @@ var y3enem1= windowHeight/2;
 var x4enem1= ((windowWidth/2) - 50) + mover;
 var y4enem1= windowHeight/2;
 
+  
   background(0);
+  
+  
   //setGradient(0, 0, width/2, height, b1, b2, X_AXIS);
  // setGradient(width/2, 0, width/2, height, b2, b1, X_AXIS);
   setGradient(0, 0, windowWidth, windowHeight/2, b2, b1, Y_AXIS);
+  //setGradient(0, 0, windowWidth, windowHeight, c2, c1, Y_AXIS);
   setGradient(0, windowHeight/2, windowWidth, windowHeight, b2, b1, Y_AXIS);
   
+ 
     
   //environment
   line(0.571*windowWidth, windowHeight/2, windowWidth, windowHeight);
@@ -156,16 +179,30 @@ var y4enem1= windowHeight/2;
   }
   mover = mover + movespeed;
 
+
   //UI
    fill(100); 
  quad(0, 0, 0, windowHeight/16, windowWidth, windowHeight/16,windowWidth, 0); 
   
-  //UI-PlayerHealth_outerborder
+  //display text.....level**********
+    fill(200);
+    text('Level 1', windowWidth/16,windowHeight/21);
+  
+  //UI-PlayerHealth_outerborder.......******
    fill(80); 
- quad(windowWidth/1.1, windowHeight/21, windowWidth/1.1, windowHeight/64, windowWidth/1.02, windowHeight/64,windowWidth/1.02, windowHeight/21); 
+ quad(windowWidth/1.24, windowHeight/21, windowWidth/1.24, windowHeight/64, windowWidth/1.02, windowHeight/64,windowWidth/1.02, windowHeight/21); 
   
   //UI payer health
   
+  //game over condition.....*******
+  if(player_health==0)
+  {
+    //canvas(100,100);
+    //fill(200);
+    //text('GAME OVER', (windowWidth/2)-100,(windowHeight/2)-10);
+    game_over=1;
+    
+  }
   if(player_health>0)
   {
    fill(0); 
@@ -182,6 +219,42 @@ var y4enem1= windowHeight/2;
    fill(0); 
  quad(windowWidth/1.09, windowHeight/24, windowWidth/1.09, windowHeight/50, windowWidth/1.07, windowHeight/50,windowWidth/1.07, windowHeight/24); 
   }
+  ////additional player health bars******
+  if(player_health>3)
+  {
+   fill(0); 
+ quad(windowWidth/1.11, windowHeight/24, windowWidth/1.11, windowHeight/50, windowWidth/1.09, windowHeight/50,windowWidth/1.09, windowHeight/24); 
+  }
+  if(player_health>4)
+  {
+   fill(0); 
+ quad(windowWidth/1.13, windowHeight/24, windowWidth/1.13, windowHeight/50, windowWidth/1.11, windowHeight/50,windowWidth/1.11, windowHeight/24); 
+  }
+  if(player_health>5)
+  {
+   fill(0); 
+ quad(windowWidth/1.15, windowHeight/24, windowWidth/1.15, windowHeight/50, windowWidth/1.13, windowHeight/50,windowWidth/1.13, windowHeight/24); 
+  }
+  if(player_health>6)
+  {
+   fill(0); 
+ quad(windowWidth/1.17, windowHeight/24, windowWidth/1.17, windowHeight/50, windowWidth/1.15, windowHeight/50,windowWidth/1.15, windowHeight/24); 
+  }
+    if(player_health>7)
+  {
+   fill(0); 
+ quad(windowWidth/1.19, windowHeight/24, windowWidth/1.19, windowHeight/50, windowWidth/1.17, windowHeight/50,windowWidth/1.17, windowHeight/24); 
+  }
+  if(player_health>8)
+  {
+   fill(0); 
+ quad(windowWidth/1.21, windowHeight/24, windowWidth/1.21, windowHeight/50, windowWidth/1.19, windowHeight/50,windowWidth/1.19, windowHeight/24); 
+  }
+  if(player_health>9)
+  {
+   fill(0); 
+ quad(windowWidth/1.23, windowHeight/24, windowWidth/1.23, windowHeight/50, windowWidth/1.21, windowHeight/50,windowWidth/1.21, windowHeight/24); 
+  }
 
   //enemy die...particle effect
   if(enemy_die_particle==1)
@@ -197,12 +270,28 @@ var y4enem1= windowHeight/2;
   fill(0); //body color
  quad(x1enem1, y1enem1, x2enem1, y2enem1, x3enem1, y3enem1, x4enem1, y4enem1); //body
  fill(255); //misc color
+  if(movespeed!=0)
+  {
  triangle(x1enem1+40, y1enem1+70, x1enem1+40, y1enem1+30, x1enem1+70, y1enem1+70); //left eye
  triangle(x1enem1+100, y1enem1+70, x1enem1+130, y1enem1+30, x1enem1+130, y1enem1+70); //right eye
+  
+  }
+  
  quad(x4enem1+15, y4enem1-50, x4enem1+65, y4enem1-50, x4enem1+60, y4enem1-60, x4enem1+20, y4enem1-60);
+  
+  //if dead...left eye******
+  if(movespeed<1)
+  {
+     triangle(x1enem1+40, y1enem1+30, x1enem1+40, y1enem1+30, x1enem1+70, y1enem1+70); //left eye
+     triangle(x1enem1+100, y1enem1+70, x1enem1+130, y1enem1+30, x1enem1+130, y1enem1+30); //right eye
+    
+    triangle(x1enem1+70, y1enem1+30, x1enem1+40, y1enem1+70, x1enem1+70, y1enem1+30);   
+    triangle(x1enem1+100, y1enem1+30, x1enem1+100, y1enem1+30, x1enem1+130, y1enem1+70);  
+  }
+  
 
   //bullet shoot effect
-   if (keyIsPressed && key == 'x' && enable_shoot==1) 
+   if (buttondata==1 && enable_shoot==1) 
    {
   push();
      fill(180);
@@ -225,9 +314,12 @@ var y4enem1= windowHeight/2;
   }
    }
   
-  //enemy bullets
+  //enemy bullets...while enemy is alive*******
+  if(movespeed!=0)
+  {
   fill(100);
   ellipse(enemy_bullet_x,enemy_bullet_y, 24, 24);
+  }
   if(enemy_bullet_y< windowHeight && stop_enemybullet==0)
    {
     //lerp from initial to final position
@@ -239,6 +331,7 @@ var y4enem1= windowHeight/2;
   if(enable_shoot == 1 && enemy_bullet_y> (windowHeight-8) )
   {
     player_health=player_health-1;
+    player_hit=1;
   }
   
   //resetting and reshooting enemy bullet
@@ -248,8 +341,8 @@ var y4enem1= windowHeight/2;
     enemy_bullet_y=windowHeight/2;
    }
   
- 
-  if(enable_shoot==1)
+ ///////condition for checking if c pressed or if bullet is midway*******
+  if(enable_shoot==1||(bullet_start_pos<(windowHeight-153)&&bullet_start_pos>((windowHeight/2)-50)))
   {
     
     //after images
@@ -314,41 +407,39 @@ var y4enem1= windowHeight/2;
     
   
   //if fire pressed
-  if (keyIsPressed && key == 'x' && enable_shoot==1) 
+  if (buttondata==1 && enable_shoot==1) 
   {
     shoot=1;
   }
 
-//console.log(inData); 
-  if (inData < 30) 
-  //if (inData == 1)
+  if (inData == 1)
   {
-   //console.log(inData); 
    enable_shoot = 1;
-   checkval = 0;
-   //console.log(checkval);
   }
-  else 
+  else
   {
-    enable_shoot = -1;
+   enable_shoot = -1;
   }
 
+ if(game_over==1)
+   {
+  fill(10,10,10); //body color
+ quad(0,0, windowWidth, 0, windowWidth, windowHeight, 0, windowHeight); //body
+  
+    fill(255,0,0);
+    text('GAME OVER', (windowWidth/2)-100,(windowHeight/2)-10);
+     enable_shoot=0;
+     stop_enemybullet=1;
+   }
+  
 
   //gunhand
   //fill(255);
   //quad(((windowWidth/2)-40),windowHeight-100,((windowWidth/2)+40),windowHeight-80,((windowWidth/2)+40),windowHeight,((windowWidth/2)-40),windowHeight);
   //stroke(0);
   //line(((windowWidth/2)-40), windowHeight-80, ((windowWidth/2)+40), windowHeight-60);
-
   
-
-
-function windowResized() {
-    // change canvas size
-    createCanvas(windowWidth, windowHeight);    
-}
-
-  if(enable_shoot==1)
+ if(enable_shoot==1)
   {
   //gun
   fill(255);
@@ -356,12 +447,37 @@ function windowResized() {
   stroke(0);
   line(((windowWidth/2)-40), windowHeight-80, ((windowWidth/2)+40), windowHeight-60);
   }
+  
+  //show player is hit ********
+  if(player_hit==1)
+  {
+    
+    //fill(255,0,0,player_hit_color);
+    fill(255,0,0,30);
+     noStroke();
+      quad(0,0, windowWidth,0, windowWidth, windowHeight, 0, windowHeight);
+    
+    player_hit_color=player_hit_color+10;
+    player_hit=0;
+  }
+  
+  
 
- // checkval=0;
+function windowResized() {
+    // change canvas size
+    createCanvas(windowWidth, windowHeight);    
+}
+
+ 
 
 }
 
- function serverConnected() {
+function windowResized() {
+    // change canvas size
+    createCanvas(windowWidth, windowHeight);    
+}
+
+function serverConnected() {
   //console.print('connected to server.');
 }
  
@@ -369,10 +485,22 @@ function portOpen() {
   console.log('the serial port opened.')
 }
  
-function serialEvent() {
+/*function serialEvent() {
  inData = serial.readStringUntil('\r\n');
  console.log(inData);
  checkval = 1;
+}*/
+function serialEvent()   //this function is called every time data is received
+{
+  
+var rawData = serial.readStringUntil('\r\n'); //read the incoming string until it sees a newline
+    console.log(rawData);                   //uncomment this line to see the incoming string in the console     
+    if(rawData.length>1)                      //check that there is something in the string
+    {                                         
+      
+      inData = JSON.parse(rawData).s1;       //the parameter value .s1 must match the parameter name created within the arduino file
+      buttondata = JSON.parse(rawData).s2; 
+    }
 }
  
 function serialError(err) {
@@ -387,4 +515,3 @@ function windowResized() {
     // change canvas size
     createCanvas(windowWidth, windowHeight);    
 }
-
