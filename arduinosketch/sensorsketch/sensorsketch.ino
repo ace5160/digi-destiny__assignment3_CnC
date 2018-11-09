@@ -24,10 +24,10 @@ int average = 0;
 
 int triggerPin = 12;   //pin conneccted to the Trig pin on the sensor
 int echoPin = 11;       //pin connected to the Echo pin on the sensor
-int maxDistance = 200;  //set the max distance for the sensor to read (helps with errors)
+int maxDistance = 100;  //set the max distance for the sensor to read (helps with errors)
 int distanceVal;        //variable to hold the distance val
 
-int sampleRate = 200;   //how fast to sample the value
+int sampleRate = 50;   //how fast to sample the value
 long lastReading;       //used for the timer
 int finval=0;
 
