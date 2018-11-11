@@ -1,4 +1,4 @@
-# digi-destiny__assignment3_CnC
+# BLOCK-BUSTER__assignment3_CnC
 This is an Arduino and HTML based game working with the concept of serial communication.
 Shoot enemies on screen by pointing at them with a physical gun outside the screen giving a more feel to the experience to the game. Press the trigger on the gun to shoot enemies.
 Dodge enemy fire by actually dodging from the sensors on the computer, engaging yourself more into the game.
