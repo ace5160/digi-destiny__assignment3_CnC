@@ -6,8 +6,8 @@ var X_AXIS = 2;
 var bullet_start_pos;//bullet
 var pbullet_oldx;
 var pbullet_oldy;
-var bullet_reducefactor;//decrease the size of bullet
-var shoot;//if bullet shot
+var bullet_reducefactor; //decrease the size of bullet
+var shoot; //if bullet shot
 var stop_enemybullet=0;
 var enable_shoot;
 var player_health=10;///////////////////Player health*****
@@ -130,38 +130,15 @@ function enemy_one()
 
 function reset_enemyvalues_level2()
 {
-  //if(resetvalues==2)
-  //{
-  //  resetvalues=(-2);
-  //  mover=2;
-  //  movespeed=15;
-  //  stop_enemybullet=0;
-    //enemy_die_particle=0;
+
     if(display_level1_complete==1)
     {
       display_level1_complete=-2;
-      enable_bossfight_text=1;
-      //mover=2;
-   // movespeed=15;
-  //  stop_enemybullet=0;
-  //  enemy_die_particle=0;
-  //    resetvalues==2;
-  //     if(level2==1)
-  //     {
-    //     level=2;
-    //   }
-      
+      enable_bossfight_text=1; 
     }
-  //}
 }
 function reset_enemyvalues_level2()
 {
-  //if(resetvalues==2)
-  //{
-  //  resetvalues=(-2);
-  //  mover=2;
-  //  movespeed=15;
-  //  stop_enemybullet=0;
     if(display_level1_complete==1)
     {
       display_level1_complete=-2;
@@ -173,10 +150,8 @@ function reset_enemyvalues_level2()
        if(level2==1)
        {
          level=2;
-       }
-      
+       } 
     }
-  //}
 }
 
 function reset_enemyvalues_level3()
@@ -184,17 +159,7 @@ function reset_enemyvalues_level3()
   if(display_level2_complete==1)
     {
       display_level2_complete=-2;
-      enable_bossfight_text=1;
-      //mover=2;
-  //  movespeed=15;
-  //  stop_enemybullet=0;
-  //  enemy_die_particle=0;
-     // resetvalues==2;
-      // if(level3==1)
-      // {
-      //   level=3;
-      // }
-      
+      enable_bossfight_text=1;  
     }
 }
 function reset_enemyvalues_level3_actual()
@@ -207,7 +172,6 @@ function reset_enemyvalues_level3_actual()
     movespeed=15;
     stop_enemybullet=0;
     enemy_die_particle=0;
-     // resetvalues==2;
        if(level3==1)
        {
          level=3;
@@ -216,8 +180,6 @@ function reset_enemyvalues_level3_actual()
     }
 }
 function draw() {
-  
-    //  setGradient(50, 90, 540, 80, c1, c2, Y_AXIS);
 
 var x1enem1= ((windowWidth/2) - 100) + mover;
 var y1enem1= windowHeight/4;
@@ -231,11 +193,7 @@ var y4enem1= windowHeight/2;
   
   background(0);
   
-  
-  //setGradient(0, 0, width/2, height, b1, b2, X_AXIS);
- // setGradient(width/2, 0, width/2, height, b2, b1, X_AXIS);
   setGradient(0, 0, windowWidth, windowHeight/2, b2, b1, Y_AXIS);
-  //setGradient(0, 0, windowWidth, windowHeight, c2, c1, Y_AXIS);
   setGradient(0, windowHeight/2, windowWidth, windowHeight, b2, b1, Y_AXIS);
   
  
@@ -248,18 +206,13 @@ var y4enem1= windowHeight/2;
   line(0.371*windowWidth, windowHeight/2, 0, windowHeight/1.6);
   line(0.328*windowWidth, windowHeight/2, 0, windowHeight/1.8);
   line(0.285*windowWidth, windowHeight/2, 0, windowHeight/1.9);
-  //line(170, 180, 0, height/16);
-  //line(140, 180, 0, height/32);
-  //line(110, 180, 0, height/64);
+
+
   line(0.628*windowWidth, windowHeight/2, windowWidth,windowHeight/1.6);
   line(0.671*windowWidth, windowHeight/2, windowWidth, windowHeight/1.8);
   line(0.714*windowWidth, windowHeight/2, windowWidth, windowHeight/1.9);
-  //line(530, 180, 700, height/16);
-  //line(560, 180, 700, height/32);
-//  line(590, 180, 700, height/64);
-  
-  //line(0, 180, 700, 180);
-  
+
+
   line(0, a, windowWidth, a);
   line(0, b, windowWidth, b);
   line(0, c, windowWidth, c);
@@ -317,9 +270,7 @@ var y4enem1= windowHeight/2;
   //game over condition.....*******
   if(player_health==0)
   {
-    //canvas(100,100);
-    //fill(200);
-    //text('GAME OVER', (windowWidth/2)-100,(windowHeight/2)-10);
+
     game_over=1;
     
   }
@@ -477,11 +428,8 @@ endShape();
   vertex(x1enem1+88, y1enem1-25);
   vertex(x1enem1+68, y1enem1-2);
   vertex(x1enem1+43, y1enem1-25);
-  //vertex(x1enem1+88, y1enem1+40);
-//  vertex(x1enem1+140, y1enem1);
-    //  vertex(x2enem1+15, y2enem1+90);
-//  vertex(x3enem1, y3enem1);
-//  vertex(x4enem1, y4enem1);
+
+
   endShape();
 // quad(x1enem1, y1enem1, x2enem1, y2enem1+100, x3enem1, y3enem1,x3enem1, y3enem1,300, 300); //body
  fill(255); //misc color
@@ -644,25 +592,14 @@ endShape();
   }
    if(bullet_start_pos < (windowHeight/2)-50)
   {
-    //shoot=0;
-  //  var reload=0;
-    //setInterval(bullet_reset,10000);
-    //if(reload=1)
-    //{
+  
    bullet_start_pos=windowHeight-153;
     shoot=0;
     
     bullet_reducefactor=1;
-    //}
-    //reload=0;
+   
   }
   
-  //function bullet_reset()
-  //{
-    //bullet_start_pos=windowHeight-153;
-    //reload=1;
-   // bullet_reducefactor=1;
-  //}
   
   
   //Bullet hit
@@ -671,8 +608,7 @@ endShape();
     //check if enemy x position is in middle of screen
     if(x1enem1>((windowWidth/2)-150) && x2enem1<((windowWidth/2)+150) )
     {
-      //fill(255);
-     // ellipse(windowWidth/2, windowHeight/2, 80, 80);
+     
       mover=0;
       movespeed=0;
       stop_enemybullet=1;
@@ -695,7 +631,7 @@ endShape();
       if(level==3)
       {
         display_level3_complete=1;
-      //  level3=1;
+     
       }
       
       
@@ -730,13 +666,6 @@ endShape();
    }
   
 
-  
-
-  //gunhand
-  //fill(255);
-  //quad(((windowWidth/2)-40),windowHeight-100,((windowWidth/2)+40),windowHeight-80,((windowWidth/2)+40),windowHeight,((windowWidth/2)-40),windowHeight);
-  //stroke(0);
-  //line(((windowWidth/2)-40), windowHeight-80, ((windowWidth/2)+40), windowHeight-60);
   
  if(enable_shoot==1)
   {
