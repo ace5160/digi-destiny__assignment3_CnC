@@ -15,6 +15,23 @@ var system; //for particle effect
 var enemy_die_particle=0;
 var enemy_die_particle_lifespan=50;
 
+//***********
+var display_start = 1;
+var display_level1_complete = 0;
+var display_level2_complete = 0;
+var display_level3_complete = 0;
+var start_screen_timer=3000;
+var display_enemy1 = 0;
+var enemy1_shoot_frequency=79;
+var enemy1_shoot_frequency2=53;
+var enemy1_shoot_frequency3=17;
+var move_enemy1bullet_away=0;
+var level=1;
+var level2=0;
+var level3=0;
+var resetvalues=0;
+var enable_bossfight_text=0;
+
 //arduino variables
 var serial; // variable to hold an instance of the serialport library
 var portName = 'COM4';  // fill in your serial
@@ -65,7 +82,7 @@ function setup() {
  serial.open(portName);              // open a serial port
     
   
-  fontsize=windowHeight/24;
+  fontsize=windowHeight/20;
   textSize(fontsize);//text part*****
     
 }
@@ -93,11 +110,114 @@ function setGradient(x, y, w, h, c1, c2, axis) {
     }
   }
 }
+
+///************
+function start_screen()
+{
+  if(display_start==1)
+  {
+  display_start=0;
+  player_health=10;
+  }
+}
+function enemy_one()
+{
+  if(display_enemy1==0)
+  {
+  display_enemy1=1;
+  }
+}
+
+function reset_enemyvalues_level2()
+{
+  //if(resetvalues==2)
+  //{
+  //  resetvalues=(-2);
+  //  mover=2;
+  //  movespeed=15;
+  //  stop_enemybullet=0;
+    //enemy_die_particle=0;
+    if(display_level1_complete==1)
+    {
+      display_level1_complete=-2;
+      enable_bossfight_text=1;
+      //mover=2;
+   // movespeed=15;
+  //  stop_enemybullet=0;
+  //  enemy_die_particle=0;
+  //    resetvalues==2;
+  //     if(level2==1)
+  //     {
+    //     level=2;
+    //   }
+      
+    }
+  //}
+}
+function reset_enemyvalues_level2()
+{
+  //if(resetvalues==2)
+  //{
+  //  resetvalues=(-2);
+  //  mover=2;
+  //  movespeed=15;
+  //  stop_enemybullet=0;
+    if(display_level1_complete==1)
+    {
+      display_level1_complete=-2;
+      mover=2;
+    movespeed=15;
+    stop_enemybullet=0;
+    enemy_die_particle=0;
+      resetvalues==2;
+       if(level2==1)
+       {
+         level=2;
+       }
+      
+    }
+  //}
+}
+
+function reset_enemyvalues_level3()
+{
+  if(display_level2_complete==1)
+    {
+      display_level2_complete=-2;
+      enable_bossfight_text=1;
+      //mover=2;
+  //  movespeed=15;
+  //  stop_enemybullet=0;
+  //  enemy_die_particle=0;
+     // resetvalues==2;
+      // if(level3==1)
+      // {
+      //   level=3;
+      // }
+      
+    }
+}
+function reset_enemyvalues_level3_actual()
+{
+  if(enable_bossfight_text==1)
+    {
+    
+      enable_bossfight_text=3;
+      mover=2;
+    movespeed=15;
+    stop_enemybullet=0;
+    enemy_die_particle=0;
+     // resetvalues==2;
+       if(level3==1)
+       {
+         level=3;
+       }
+      
+    }
+}
 function draw() {
   
     //  setGradient(50, 90, 540, 80, c1, c2, Y_AXIS);
-
-     
 
 var x1enem1= ((windowWidth/2) - 100) + mover;
 var y1enem1= windowHeight/4;
@@ -186,7 +306,7 @@ var y4enem1= windowHeight/2;
   
   //display text.....level**********
     fill(200);
-    text('Level 1', windowWidth/16,windowHeight/21);
+    text('Level ' + level , windowWidth/16,windowHeight/21);
   
   //UI-PlayerHealth_outerborder.......******
    fill(80); 
@@ -267,29 +387,127 @@ var y4enem1= windowHeight/2;
     }
   }
   
-  fill(0); //body color
- quad(x1enem1, y1enem1, x2enem1, y2enem1, x3enem1, y3enem1, x4enem1, y4enem1); //body
+  //***********
+ 
+  
+  
+  //***********
+
+
+if(level==1)
+{
+   fill(0); //body color
+  beginShape();
+  vertex(x1enem1-20, y1enem1+110);
+  vertex(x1enem1+20, y1enem1-25);
+      vertex(x2enem1, y2enem1+50);
+  vertex(x3enem1, y3enem1);
+  vertex(x4enem1, y4enem1);
+  endShape();
+// quad(x1enem1, y1enem1, x2enem1, y2enem1+100, x3enem1, y3enem1,x3enem1, y3enem1,300, 300); //body
  fill(255); //misc color
   if(movespeed!=0)
   {
- triangle(x1enem1+40, y1enem1+70, x1enem1+40, y1enem1+30, x1enem1+70, y1enem1+70); //left eye
- triangle(x1enem1+100, y1enem1+70, x1enem1+130, y1enem1+30, x1enem1+130, y1enem1+70); //right eye
+ triangle(x1enem1+40, y1enem1+100, x1enem1+40, y1enem1+60, x1enem1+70, y1enem1+100); //left eye
+ triangle(x1enem1+100, y1enem1+100, x1enem1+130, y1enem1+60, x1enem1+130, y1enem1+100); //right eye
   
   }
   
- quad(x4enem1+15, y4enem1-50, x4enem1+65, y4enem1-50, x4enem1+60, y4enem1-60, x4enem1+20, y4enem1-60);
+ //quad(x4enem1+15, y4enem1-50, x4enem1+65, y4enem1-50, x4enem1+60, y4enem1-68, x4enem1+20, y4enem1-68);
+  quad(x4enem1+15, y4enem1-50, x4enem1+65, y4enem1-50, x4enem1+60, y4enem1-68, x4enem1+20, y4enem1-68);
+
   
   //if dead...left eye******
   if(movespeed<1)
   {
-     triangle(x1enem1+40, y1enem1+30, x1enem1+40, y1enem1+30, x1enem1+70, y1enem1+70); //left eye
-     triangle(x1enem1+100, y1enem1+70, x1enem1+130, y1enem1+30, x1enem1+130, y1enem1+30); //right eye
+     triangle(x1enem1+40, y1enem1+60, x1enem1+40, y1enem1+60, x1enem1+70, y1enem1+100); //left eye
+     triangle(x1enem1+100, y1enem1+100, x1enem1+130, y1enem1+60, x1enem1+130, y1enem1+60); //right eye
     
-    triangle(x1enem1+70, y1enem1+30, x1enem1+40, y1enem1+70, x1enem1+70, y1enem1+30);   
-    triangle(x1enem1+100, y1enem1+30, x1enem1+100, y1enem1+30, x1enem1+130, y1enem1+70);  
+    triangle(x1enem1+70, y1enem1+60, x1enem1+40, y1enem1+100, x1enem1+70, y1enem1+60);   
+    triangle(x1enem1+100, y1enem1+60, x1enem1+100, y1enem1+60, x1enem1+130, y1enem1+100);  
   }
   
+}
 
+if(level==2)
+{
+   fill(0); //body color
+ quad(x1enem1, y1enem1+15, x2enem1, y2enem1+15, x3enem1, y3enem1, x4enem1, y4enem1); //body
+ fill(255); //misc color
+  if(movespeed!=0)
+  {
+ triangle(x1enem1+40, y1enem1+100, x1enem1+40, y1enem1+60, x1enem1+70, y1enem1+100); //left eye
+ triangle(x1enem1+100, y1enem1+100, x1enem1+130, y1enem1+60, x1enem1+130, y1enem1+100); //right eye
+  
+  }
+  
+ quad(x4enem1+15, y4enem1-50, x4enem1+65, y4enem1-50, x4enem1+60, y4enem1-68, x4enem1+20, y4enem1-68);
+  
+  //if dead...left eye******
+  if(movespeed<1)
+  {
+     triangle(x1enem1+40, y1enem1+60, x1enem1+40, y1enem1+60, x1enem1+70, y1enem1+100); //left eye
+     triangle(x1enem1+100, y1enem1+100, x1enem1+130, y1enem1+60, x1enem1+130, y1enem1+60); //right eye
+    
+    triangle(x1enem1+70, y1enem1+60, x1enem1+40, y1enem1+100, x1enem1+70, y1enem1+60);   
+    triangle(x1enem1+100, y1enem1+60, x1enem1+100, y1enem1+60, x1enem1+130, y1enem1+100);  
+  }
+  
+}
+if(level==3)
+{
+    fill(0); //body color
+  beginShape();
+  vertex(x1enem1-20, y1enem1+90);
+  vertex(x1enem1+40, y1enem1);
+  vertex(x1enem1+88, y1enem1+40);
+  vertex(x1enem1+140, y1enem1);
+      vertex(x2enem1+15, y2enem1+90);
+  vertex(x3enem1, y3enem1);
+  vertex(x4enem1, y4enem1);
+endShape();
+  
+  beginShape();//crown
+  vertex(x1enem1+43, y1enem1-25);
+  vertex(x1enem1+54, y1enem1+10);
+  vertex(x1enem1+88, y1enem1+35);
+    vertex(x1enem1+128, y1enem1+10);
+  vertex(x1enem1+133, y1enem1-25);
+  vertex(x1enem1+108, y1enem1-2);
+  vertex(x1enem1+88, y1enem1-25);
+  vertex(x1enem1+68, y1enem1-2);
+  vertex(x1enem1+43, y1enem1-25);
+  //vertex(x1enem1+88, y1enem1+40);
+//  vertex(x1enem1+140, y1enem1);
+    //  vertex(x2enem1+15, y2enem1+90);
+//  vertex(x3enem1, y3enem1);
+//  vertex(x4enem1, y4enem1);
+  endShape();
+// quad(x1enem1, y1enem1, x2enem1, y2enem1+100, x3enem1, y3enem1,x3enem1, y3enem1,300, 300); //body
+ fill(255); //misc color
+  if(movespeed!=0)
+  {
+ triangle(x1enem1+40, y1enem1+100, x1enem1+40, y1enem1+60, x1enem1+70, y1enem1+100); //left eye
+ triangle(x1enem1+100, y1enem1+100, x1enem1+130, y1enem1+60, x1enem1+130, y1enem1+100); //right eye
+  
+  }
+  
+ quad(x4enem1+15, y4enem1-50, x4enem1+65, y4enem1-50, x4enem1+60, y4enem1-68, x4enem1+20, y4enem1-68);
+  
+  //if dead...left eye******
+  if(movespeed<1)
+  {
+     triangle(x1enem1+40, y1enem1+60, x1enem1+40, y1enem1+60, x1enem1+70, y1enem1+100); //left eye
+     triangle(x1enem1+100, y1enem1+100, x1enem1+130, y1enem1+60, x1enem1+130, y1enem1+60); //right eye
+    
+    triangle(x1enem1+70, y1enem1+60, x1enem1+40, y1enem1+100, x1enem1+70, y1enem1+60);   
+    triangle(x1enem1+100, y1enem1+60, x1enem1+100, y1enem1+60, x1enem1+130, y1enem1+100);  
+  }
+}
+
+
+  
+  
   //bullet shoot effect
    if (buttondata==1 && enable_shoot==1) 
    {
@@ -315,20 +533,31 @@ var y4enem1= windowHeight/2;
    }
   
   //enemy bullets...while enemy is alive*******
-  if(movespeed!=0)
+  if(movespeed!=0 && display_enemy1==1)
   {
-  fill(100);
-  ellipse(enemy_bullet_x,enemy_bullet_y, 24, 24);
+  fill(0);
+ ellipse(enemy_bullet_x,enemy_bullet_y,24, 24);
   }
+  
+  
   if(enemy_bullet_y< windowHeight && stop_enemybullet==0)
    {
+     //*****************
     //lerp from initial to final position
+     if(move_enemy1bullet_away==0)
+     {
     enemy_bullet_x = lerp(enemy_bullet_x, windowWidth/2, 0.03);
     enemy_bullet_y = lerp(enemy_bullet_y, windowHeight+180, 0.03);
+     }
+     else
+     {
+       enemy_bullet_x=0;
+       enemy_bullet_y=windowHeight+15;
+     }
    }
   
   //player health condition
-  if(enable_shoot == 1 && enemy_bullet_y> (windowHeight-8) )
+  if(enable_shoot == 1 && enemy_bullet_y> (windowHeight-8) && display_enemy1==1 && move_enemy1bullet_away==0 )
   {
     player_health=player_health-1;
     player_hit=1;
@@ -337,8 +566,56 @@ var y4enem1= windowHeight/2;
   //resetting and reshooting enemy bullet
   if(enemy_bullet_y> (windowHeight-5) && stop_enemybullet==0)
    {
-    enemy_bullet_x=x2enem1;
+     //*******************
+    // var enemy1_shoot_frequency=5;
+     if(level==1)
+     {
+     if(enemy1_shoot_frequency%79==0)
+     {
+       move_enemy1bullet_away=0;
+    enemy_bullet_x=x2enem1-50;
     enemy_bullet_y=windowHeight/2;
+       enemy1_shoot_frequency=enemy1_shoot_frequency+1;
+     }
+     else
+     {
+       //hide enemy bullet
+       enemy1_shoot_frequency=enemy1_shoot_frequency+1;
+       move_enemy1bullet_away=1;
+     }
+     }
+     if(level==2)
+     {
+     if(enemy1_shoot_frequency2%53==0)
+     {
+       move_enemy1bullet_away=0;
+    enemy_bullet_x=x2enem1-50;
+    enemy_bullet_y=windowHeight/2;
+       enemy1_shoot_frequency=enemy1_shoot_frequency+1;
+     }
+     else
+     {
+       //hide enemy bullet
+       enemy1_shoot_frequency=enemy1_shoot_frequency+1;
+       move_enemy1bullet_away=1;
+     }
+     }
+     if(level==3)
+     {
+     if(enemy1_shoot_frequency3%17==0)
+     {
+       move_enemy1bullet_away=0;
+    enemy_bullet_x=x2enem1-50;
+    enemy_bullet_y=windowHeight/2;
+       enemy1_shoot_frequency=enemy1_shoot_frequency+1;
+     }
+     else
+     {
+       //hide enemy bullet
+       enemy1_shoot_frequency=enemy1_shoot_frequency+1;
+       move_enemy1bullet_away=1;
+     }
+     }
    }
   
  ///////condition for checking if c pressed or if bullet is midway*******
@@ -401,6 +678,26 @@ var y4enem1= windowHeight/2;
       stop_enemybullet=1;
       //generate particle effect here: (windowHeight/2)-50...h/2+50..-+5......w/2 +- 5
       enemy_die_particle=1;
+      if(level==1)
+      {
+      level2=1;
+        
+          
+          
+          display_level1_complete=1; //run the function ask after 3 second 
+ 
+      }
+      if(level==2)
+      {
+        display_level2_complete=1;
+        level3=1;
+      }
+      if(level==3)
+      {
+        display_level3_complete=1;
+      //  level3=1;
+      }
+      
       
     }
   }
@@ -412,16 +709,16 @@ var y4enem1= windowHeight/2;
     shoot=1;
   }
 
-  if (inData == 1)
+  if (inData==1) 
   {
-   enable_shoot = 1;
-  }
+   enable_shoot= 1;
+ }
   else
-  {
-   enable_shoot = -1;
-  }
+{
+  enable_shoot= -1;
+}
 
- if(game_over==1)
+ if(game_over==1 && display_start!=1)
    {
   fill(10,10,10); //body color
  quad(0,0, windowWidth, 0, windowWidth, windowHeight, 0, windowHeight); //body
@@ -431,6 +728,8 @@ var y4enem1= windowHeight/2;
      enable_shoot=0;
      stop_enemybullet=1;
    }
+  
+
   
 
   //gunhand
@@ -462,14 +761,69 @@ var y4enem1= windowHeight/2;
   }
   
   
-
-function windowResized() {
-    // change canvas size
-    createCanvas(windowWidth, windowHeight);    
-}
-
- 
-
+    ///////***************
+    if(display_start==1)
+  {
+    fill(10,10,10); //body color
+ quad(0,0, windowWidth, 0, windowWidth, windowHeight, 0, windowHeight); //body
+  
+    fill(255);
+    text('Block-Buster', (windowWidth/2)-100,(windowHeight/2)-10);
+    setInterval(start_screen,start_screen_timer); //run the function ask after 3 second 
+  }
+     if(display_level1_complete==1)
+  {
+    
+    fill(10,10,10); //body color
+ quad(0,0, windowWidth, 0, windowWidth, windowHeight, 0, windowHeight); //body
+  
+    fill(255);
+    text('Level 1 completed', (windowWidth/2)-100,(windowHeight/2)-10);
+    setInterval(reset_enemyvalues_level2,2000);
+    //run the function ask after 3 second 
+  }
+   if(display_level2_complete==1)
+  {
+    
+    fill(10,10,10); //body color
+ quad(0,0, windowWidth, 0, windowWidth, windowHeight, 0, windowHeight); //body
+  
+    fill(255);
+    text('Level 2 completed', (windowWidth/2)-100,(windowHeight/2)-10);
+    setInterval(reset_enemyvalues_level3,2000);
+    //run the function ask after 3 second 
+  }
+   if(enable_bossfight_text==1)
+  {
+    
+    fill(10,10,10); //body color
+ quad(0,0, windowWidth, 0, windowWidth, windowHeight, 0, windowHeight); //body
+  
+    fill(255);
+    text('Boss fight', (windowWidth/2)-100,(windowHeight/2)-10);
+    setInterval(reset_enemyvalues_level3_actual,2000);
+    //run the function ask after 3 second 
+  }
+   if(display_level3_complete==1)
+  {
+    
+    fill(10,10,10); //body color
+ quad(0,0, windowWidth, 0, windowWidth, windowHeight, 0, windowHeight); //body
+  
+    fill(255);
+    text('Congratulations!', (windowWidth/2)-100,(windowHeight/2)-10);
+    fill(255);
+     text('All digibits have been defeated', (windowWidth/2)-100,(windowHeight/2)+50);
+    //setInterval(reset_enemyvalues_level3,2000);
+    //run the function ask after 3 second 
+  }
+  
+  if(display_enemy1==0)
+  {
+    setInterval(enemy_one,start_screen_timer+1000); //display enemy1 1 second after start goes away
+  }
+  
+  
 }
 
 function windowResized() {

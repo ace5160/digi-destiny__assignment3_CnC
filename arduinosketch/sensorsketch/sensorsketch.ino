@@ -87,7 +87,7 @@ if(distanceVal!=0)
   // calculate the average:
   average = total / numReadings;
 
-  if(average<30)
+  if(average<50)
   {
     finval=1;
   }
